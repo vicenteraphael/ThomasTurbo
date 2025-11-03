@@ -290,21 +290,58 @@ CREATE TABLE Conta (
 -- OPERAÇÕES CRUD
 -- =====================
 
+/*
+Cadastro de um Funcionário
+*/
+
+-- Cadastro
+INSERT INTO Cadastro (CadastroDataCriacao, CadastroStatus, CadastroPeriodoAnos)
+VALUES ('2025-11-03', TRUE, 5);
+SET @CadastroID = LAST_INSERT_ID();
+SELECT * FROM Cadastro;
+
+-- Pessoa
+INSERT INTO Pessoa (FK_CadastroID)
+VALUES (@CadastroID);
+SET @PessoaID = LAST_INSERT_ID();
+SELECT * FROM Pessoa;
+
+-- PessoaFisica
+INSERT INTO PessoaFisica (FK_PessoaID, AK_PessoaCPF, PessoaNome)
+VALUES (@PessoaID, '55010002450', "Thomas Nascimento Correia");
+SET @PessoaFisicaID = LAST_INSERT_ID();
+SELECT * FROM PessoaFisica;
+
+-- Profissao
 INSERT INTO Profissao (ProfissaoTipo, ProfissaoSalarioBase)
 VALUES
-    ('Mecânico', 3500.00),
+	('Mecânico', 3500.00),
     ('Atendente', 2200.00),
+    ('Entregador', 1600.00),
     ('Gerente', 5200.00);
+SET @ProfissaoID = LAST_INSERT_ID();
+SELECT * FROM Profissao;
+
+-- Funcionario
+INSERT INTO Funcionario (FK_PessoaFisicaID, FK_ProfissaoID, FuncionarioCurriculo, FuncionarioSalario, FuncionarioContrato)
+VALUES (@PessoaFisicaID, @ProfissaoID, null, 10000.00, "Contrato CLT");
+SELECT * FROM Funcionario;
+
+/*
+Atualizando dados
+*/
+
+UPDATE Profissao 
+SET ProfissaoSalarioBase = 8000.00
+WHERE ProfissaoTipo = 'Gerente';
 
 SELECT * FROM Profissao;
 
-UPDATE Profissao
-SET ProfissaoSalarioBase = 3800.00
-WHERE ProfissaoTipo = 'Mecânico';
-
-SELECT * FROM Profissao;
+/*
+Removendo dados
+*/
 
 DELETE FROM Profissao
-WHERE ProfissaoTipo = 'Atendente';
+WHERE ProfissaoTipo = 'Entregador';
 
 SELECT * FROM Profissao;
