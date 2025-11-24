@@ -1,4 +1,4 @@
-CREATE DATABASE ThomasTurbo;
+CREATE DATABASE IF NOT EXISTS ThomasTurbo;
 USE ThomasTurbo;
 
 SET SQL_SAFE_UPDATES = 0;
@@ -7,7 +7,7 @@ SET SQL_SAFE_UPDATES = 0;
 -- TABELAS BÁSICAS
 -- =====================
 
-CREATE TABLE Cadastro (
+CREATE TABLE IF NOT EXISTS Cadastro (
     PK_CadastroID INT PRIMARY KEY AUTO_INCREMENT,
     CadastroDataCriacao DATE NOT NULL,
     CadastroDataAtualizacao DATE,
@@ -15,54 +15,54 @@ CREATE TABLE Cadastro (
     CadastroPeriodoAnos INT
 );
 
-CREATE TABLE Profissao (
+CREATE TABLE IF NOT EXISTS Profissao (
     PK_ProfissaoID INT PRIMARY KEY AUTO_INCREMENT,
     ProfissaoTipo VARCHAR(100),
     ProfissaoSalarioBase DECIMAL(10,2)
 );
 
-CREATE TABLE ContaTipo (
+CREATE TABLE IF NOT EXISTS ContaTipo (
     PK_ContaTipoID INT PRIMARY KEY AUTO_INCREMENT,
     ContaTipoNome VARCHAR(50)
 );
 
-CREATE TABLE TipoPagamento (
+CREATE TABLE IF NOT EXISTS TipoPagamento (
     PK_TipoPagamentoID INT PRIMARY KEY AUTO_INCREMENT,
     TipoPagamentoDescricao VARCHAR(100)
 );
 
-CREATE TABLE TipoEntrega (
+CREATE TABLE IF NOT EXISTS TipoEntrega (
     PK_TipoEntregaID INT PRIMARY KEY AUTO_INCREMENT,
     TipoEntregaDescricao VARCHAR(100)
 );
 
-CREATE TABLE PecaCategoria (
+CREATE TABLE IF NOT EXISTS PecaCategoria (
     PK_PecaCategoriaID INT PRIMARY KEY AUTO_INCREMENT,
     PecaCategoriaDescricao VARCHAR(100)
 );
 
-CREATE TABLE PecaMarca (
+CREATE TABLE IF NOT EXISTS PecaMarca (
     PK_PecaMarcaID INT PRIMARY KEY AUTO_INCREMENT,
     PecaMarcaNome VARCHAR(100)
 );
 
-CREATE TABLE VeiculoMarca (
+CREATE TABLE IF NOT EXISTS VeiculoMarca (
     PK_VeiculoMarcaID INT PRIMARY KEY AUTO_INCREMENT,
     VeiculoMarcaDescricao VARCHAR(100)
 );
 
-CREATE TABLE VeiculoModelo (
+CREATE TABLE IF NOT EXISTS VeiculoModelo (
     PK_VeiculoModeloID INT PRIMARY KEY AUTO_INCREMENT,
     VeiculoModeloDescricao VARCHAR(100)
 );
 
-CREATE TABLE EstoqueOperacao (
+CREATE TABLE IF NOT EXISTS EstoqueOperacao (
     PK_EstoqueOperacaoID INT PRIMARY KEY AUTO_INCREMENT,
     EstoqueOperacaoNome VARCHAR(100),
     EstoqueOperacaoQuantidade INT
 );
 
-CREATE TABLE FidelidadeAssinatura (
+CREATE TABLE IF NOT EXISTS FidelidadeAssinatura (
     PK_FidelidadeAssinaturaID INT PRIMARY KEY AUTO_INCREMENT,
     FidelidadeAssinaturaMensalidade DECIMAL(10,2),
     FidelidadeAssinaturaDataInicio DATE,
@@ -74,13 +74,13 @@ CREATE TABLE FidelidadeAssinatura (
 -- PESSOAS
 -- =====================
 
-CREATE TABLE Pessoa (
+CREATE TABLE IF NOT EXISTS Pessoa (
     PK_PessoaID INT PRIMARY KEY AUTO_INCREMENT,
     FK_CadastroID INT,
     FOREIGN KEY (FK_CadastroID) REFERENCES Cadastro(PK_CadastroID)
 );
 
-CREATE TABLE PessoaFisica (
+CREATE TABLE IF NOT EXISTS PessoaFisica (
     PK_PessoaFisicaID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaID INT,
     AK_PessoaCPF CHAR(11) UNIQUE,
@@ -88,7 +88,7 @@ CREATE TABLE PessoaFisica (
     FOREIGN KEY (FK_PessoaID) REFERENCES Pessoa(PK_PessoaID)
 );
 
-CREATE TABLE PessoaJuridica (
+CREATE TABLE IF NOT EXISTS PessoaJuridica (
     PK_PessoaJuridicaID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaID INT,
     AK_PessoaCNPJ CHAR(14) UNIQUE,
@@ -96,21 +96,21 @@ CREATE TABLE PessoaJuridica (
     FOREIGN KEY (FK_PessoaID) REFERENCES Pessoa(PK_PessoaID)
 );
 
-CREATE TABLE Telefone (
+CREATE TABLE IF NOT EXISTS Telefone (
     PK_TelefoneID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaID INT,
     TelefoneNumeracao VARCHAR(15),
     FOREIGN KEY (FK_PessoaID) REFERENCES Pessoa(PK_PessoaID)
 );
 
-CREATE TABLE Email (
+CREATE TABLE IF NOT EXISTS Email (
     PK_EmailID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaID INT,
     PessoaEmail VARCHAR(150),
     FOREIGN KEY (FK_PessoaID) REFERENCES Pessoa(PK_PessoaID)
 );
 
-CREATE TABLE Endereco (
+CREATE TABLE IF NOT EXISTS Endereco (
     PK_EnderecoID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaID INT,
     EnderecoRua VARCHAR(100),
@@ -126,7 +126,7 @@ CREATE TABLE Endereco (
 -- FUNCIONÁRIOS / CLIENTES
 -- =====================
 
-CREATE TABLE Funcionario (
+CREATE TABLE IF NOT EXISTS Funcionario (
     PK_FuncionarioID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaFisicaID INT,
     FK_ProfissaoID INT,
@@ -137,7 +137,7 @@ CREATE TABLE Funcionario (
     FOREIGN KEY (FK_ProfissaoID) REFERENCES Profissao(PK_ProfissaoID)
 );
 
-CREATE TABLE ClienteFidelidade (
+CREATE TABLE IF NOT EXISTS ClienteFidelidade (
     PK_ClienteFidelidadeID INT PRIMARY KEY AUTO_INCREMENT,
     FK_FidelidadeAssinaturaID INT,
     ClienteFidelidadeNome VARCHAR(100),
@@ -146,7 +146,7 @@ CREATE TABLE ClienteFidelidade (
     FOREIGN KEY (FK_FidelidadeAssinaturaID) REFERENCES FidelidadeAssinatura(PK_FidelidadeAssinaturaID)
 );
 
-CREATE TABLE Cliente (
+CREATE TABLE IF NOT EXISTS Cliente (
     PK_ClienteID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaID INT,
     FK_ClienteFidelidadeID INT,
@@ -156,7 +156,7 @@ CREATE TABLE Cliente (
     FOREIGN KEY (FK_ClienteFidelidadeID) REFERENCES ClienteFidelidade(PK_ClienteFidelidadeID)
 );
 
-CREATE TABLE Fornecedor (
+CREATE TABLE IF NOT EXISTS Fornecedor (
     PK_FornecedorID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PessoaJuridicaID INT,
     FOREIGN KEY (FK_PessoaJuridicaID) REFERENCES PessoaJuridica(PK_PessoaJuridicaID)
@@ -166,7 +166,7 @@ CREATE TABLE Fornecedor (
 -- VEÍCULOS / PEÇAS / ESTOQUE
 -- =====================
 
-CREATE TABLE Veiculo (
+CREATE TABLE IF NOT EXISTS Veiculo (
     PK_VeiculoID INT PRIMARY KEY AUTO_INCREMENT,
     FK_VeiculoMarcaID INT,
     FK_VeiculoModeloID INT,
@@ -176,7 +176,7 @@ CREATE TABLE Veiculo (
     FOREIGN KEY (FK_VeiculoModeloID) REFERENCES VeiculoModelo(PK_VeiculoModeloID)
 );
 
-CREATE TABLE Peca (
+CREATE TABLE IF NOT EXISTS Peca (
     PK_PecaID INT PRIMARY KEY AUTO_INCREMENT,
     FK_CadastroID INT,
     FK_FornecedorID INT,
@@ -193,14 +193,14 @@ CREATE TABLE Peca (
     FOREIGN KEY (FK_PecaVeiculoID) REFERENCES Veiculo(PK_VeiculoID)
 );
 
-CREATE TABLE Estoque (
+CREATE TABLE IF NOT EXISTS Estoque (
     PK_EstoqueID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PecaID INT,
     EstoqueQuantidadePecas INT,
     FOREIGN KEY (FK_PecaID) REFERENCES Peca(PK_PecaID)
 );
 
-CREATE TABLE MovimentacaoEstoque (
+CREATE TABLE IF NOT EXISTS MovimentacaoEstoque (
     PK_MovimentacaoEstoqueID INT PRIMARY KEY AUTO_INCREMENT,
     FK_FuncionarioID INT,
     FK_EstoqueID INT,
@@ -216,7 +216,7 @@ CREATE TABLE MovimentacaoEstoque (
 -- PEDIDOS / COMPRAS / PAGAMENTOS
 -- =====================
 
-CREATE TABLE Pedido (
+CREATE TABLE IF NOT EXISTS Pedido (
     PK_PedidoID INT PRIMARY KEY AUTO_INCREMENT,
     FK_ClienteID INT,
     FK_FuncionarioID INT,
@@ -227,7 +227,7 @@ CREATE TABLE Pedido (
     FOREIGN KEY (FK_FuncionarioID) REFERENCES Funcionario(PK_FuncionarioID)
 );
 
-CREATE TABLE ItemPedido (
+CREATE TABLE IF NOT EXISTS ItemPedido (
     PK_ItemPedidoID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PedidoID INT,
     FK_PecaID INT,
@@ -237,7 +237,7 @@ CREATE TABLE ItemPedido (
     FOREIGN KEY (FK_PecaID) REFERENCES Peca(PK_PecaID)
 );
 
-CREATE TABLE Compra (
+CREATE TABLE IF NOT EXISTS Compra (
     PK_CompraID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PedidoID INT,
     CompraData DATE,
@@ -245,7 +245,7 @@ CREATE TABLE Compra (
     FOREIGN KEY (FK_PedidoID) REFERENCES Pedido(PK_PedidoID)
 );
 
-CREATE TABLE Pagamento (
+CREATE TABLE IF NOT EXISTS Pagamento (
     PK_PagamentoID INT PRIMARY KEY AUTO_INCREMENT,
     FK_CompraID INT,
     FK_TipoPagamentoID INT,
@@ -255,7 +255,7 @@ CREATE TABLE Pagamento (
     FOREIGN KEY (FK_TipoPagamentoID) REFERENCES TipoPagamento(PK_TipoPagamentoID)
 );
 
-CREATE TABLE Devolucao (
+CREATE TABLE IF NOT EXISTS Devolucao (
     PK_DevolucaoID INT PRIMARY KEY AUTO_INCREMENT,
     FK_ItemPedidoID INT,
     DevolucaoData DATE,
@@ -263,7 +263,7 @@ CREATE TABLE Devolucao (
     FOREIGN KEY (FK_ItemPedidoID) REFERENCES ItemPedido(PK_ItemPedidoID)
 );
 
-CREATE TABLE Encomenda (
+CREATE TABLE IF NOT EXISTS Encomenda (
     PK_EncomendaID INT PRIMARY KEY AUTO_INCREMENT,
     FK_PedidoID INT,
     FK_TipoEntregaID INT,
@@ -276,7 +276,7 @@ CREATE TABLE Encomenda (
 -- CONTAS BANCÁRIAS
 -- =====================
 
-CREATE TABLE Conta (
+CREATE TABLE IF NOT EXISTS Conta (
     PK_ContaID INT PRIMARY KEY AUTO_INCREMENT,
     FK_ContaTipoID INT,
     FK_FuncionarioID INT,
@@ -345,3 +345,19 @@ DELETE FROM Profissao
 WHERE ProfissaoTipo = 'Entregador';
 
 SELECT * FROM Profissao;
+
+/*
+Mais inserções
+*/
+
+INSERT INTO VeiculoMarca (VeiculoMarcaDescricao)
+VALUES ('Toyota');
+SELECT * FROM VeiculoMarca;
+
+INSERT INTO VeiculoModelo (VeiculoModeloDescricao)
+VALUES ('Corolla');
+SELECT * FROM VeiculoMarca;
+
+INSERT INTO Veiculo (FK_VeiculoMarcaID, FK_VeiculoModeloID, VeiculoAno, VeiculoDescricao)
+VALUES (1, 1, 2023, 'Toyota Corolla 2023');
+SELECT * FROM Veiculo;
